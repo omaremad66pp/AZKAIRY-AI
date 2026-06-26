@@ -13,6 +13,7 @@ class IslamicLifeApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Islamic App',
       theme: ThemeData(
+        
         brightness: Brightness.dark,
         scaffoldBackgroundColor: const Color(0xFF0A0F0D),
       ),
