@@ -13,7 +13,6 @@ class IslamicLifeApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Islamic App',
       theme: ThemeData(
-        
         brightness: Brightness.dark,
         scaffoldBackgroundColor: const Color(0xFF0A0F0D),
       ),
@@ -65,23 +64,13 @@ class AzkarCategoriesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Map<String, dynamic>> categories = [
-      {'title': 'أذكار الصباح', 'icon': Icons.wb_sunny, 'color': Colors.orange.shade900, 'data': [
+      {'title': 'أذكار الصباح', 'icon': Icons.wb_sunny, 'color': Colors.orange, 'data': [
         {'text': 'أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ وَالْحَمْدُ لِلَّهِ.', 'count': 1},
         {'text': 'آية الكرسي: اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ.', 'count': 1},
       ]},
-      {'title': 'أذكار المساء', 'icon': Icons.brightness_3, 'color': Colors.purple.shade900, 'data': [
+      {'title': 'أذكار المساء', 'icon': Icons.brightness_3, 'color': Colors.purple, 'data': [
         {'text': 'أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ وَالْحَمْدُ لِلَّهِ.', 'count': 1},
         {'text': 'قُلْ هُوَ اللَّهُ أَحَدٌ... (3 مرات)', 'count': 3},
-      ]},
-      {'title': 'أذكار الصلاة', 'icon': Icons.mosque, 'color': const Color(0xFF1E3A2F), 'data': [
-        {'text': 'أستغفر الله (ثلاثاً)، اللهم أنت السلام ومنك السلام.', 'count': 1},
-        {'text': 'سبحان الله (33 مرة)، الحمد لله (33 مرة)، الله أكبر (33 مرة)', 'count': 33},
-      ]},
-      {'title': 'أذكار السفر', 'icon': Icons.flight_takeoff, 'color': Colors.blueGrey, 'data': [
-        {'text': 'سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَٰذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ.', 'count': 1},
-      ]},
-      {'title': 'أذكار الملبس', 'icon': Icons.checkroom, 'color': Colors.brown, 'data': [
-        {'text': 'الحَمْدُ للَّهِ الَّذِي كَسَانِي هَذَا الثَّوْبَ وَرَزَقَنِيهِ مِنْ غَيْرِ حَوْلٍ مِنِّي وَلَا قُوَّةٍ.', 'count': 1},
       ]},
     ];
 
@@ -91,36 +80,30 @@ class AzkarCategoriesScreen extends StatelessWidget {
         backgroundColor: const Color(0xFF121B17),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: ListView.builder(
-          itemCount: categories.length,
-          itemBuilder: (context, index) {
-            return Card(
-              color: const Color(0xFF16221C),
-              margin: const EdgeInsets.symmetric(vertical: 8),
-              child: ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: categories[index]['color'],
-                  child: Icon(categories[index]['icon'], color: Colors.white),
-                ),
-                title: Text(categories[index]['title'], style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
-                trailing: const Icon(Icons.arrow_forward_ios, color: Color(0xFFD4AF37)),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AzkarDisplayScreen(
-                        title: categories[index]['title'],
-                        azkarList: categories[index]['data'],
-                      ),
+      body: ListView.builder(
+        itemCount: categories.length,
+        itemBuilder: (context, index) {
+          return Card(
+            color: const Color(0xFF16221C),
+            margin: const EdgeInsets.all(8),
+            child: ListTile(
+              leading: Icon(categories[index]['icon'] as IconData, color: categories[index]['color'] as Color),
+              title: Text(categories[index]['title'] as String, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              trailing: const Icon(Icons.arrow_forward_ios, color: Color(0xFFD4AF37)),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AzkarDisplayScreen(
+                      title: categories[index]['title'] as String,
+                      azkarList: categories[index]['data'] as List<Map<String, dynamic>>,
                     ),
-                  );
-                },
-              ),
-            );
-          },
-        ),
+                  ),
+                );
+              },
+            ),
+          );
+        },
       ),
     );
   }
@@ -161,21 +144,13 @@ class _AzkarDisplayScreenState extends State<AzkarDisplayScreen> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  Text(
-                    widget.azkarList[index]['text'],
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 18, height: 1.6),
-                  ),
+                  Text(widget.azkarList[index]['text'] as String, textAlign: TextAlign.center, style: const TextStyle(fontSize: 18, height: 1.6)),
                   const Divider(height: 25),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: _counts[index] == 0 ? Colors.grey : const Color(0xFFD4AF37),
                     ),
-                    onPressed: _counts[index] == 0 ? null : () {
-                      setState(() {
-                        _counts[index]--;
-                      });
-                    },
+                    onPressed: _counts[index] == 0 ? null : () => setState(() => _counts[index]--),
                     child: Text(_counts[index] == 0 ? 'تم الانتهاء ✓' : 'المتبقي: ${_counts[index]}'),
                   )
                 ],
@@ -272,7 +247,7 @@ class QuranPlaceholderScreen extends StatelessWidget {
               ),
               SizedBox(height: 15),
               Text(
-                'تمت تهيئة التصميم العصري بنجاح لاستقبال ملفات تشغيل القرآن وصوت الأذان والمنبه تلقائياً في التحديثات القادمة للبرنامج!',
+                'تمت تهيئة التصميم العصري بنجاح لاستقبل ملفات تشغيل القرآن وصوت الأذان والمنبه تلقائياً في التحديثات القادمة للبرنامج!',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 14, color: Colors.white60, height: 1.5),
               ),
