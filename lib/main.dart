@@ -1,5 +1,4 @@
-
-   import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 void main() {
   runApp(const IslamicLifeApp());
@@ -274,7 +273,7 @@ class QuranPlaceholderScreen extends StatelessWidget {
               ),
               SizedBox(height: 15),
               Text(
-                'تمت تهيئة التصميم العصري بنجاح لاستقبل ملفات تشغيل القرآن وصوت الأذان والمنبه تلقائياً في التحديثات القادمة للبرنامج!',
+                'تمت تهيئة التصميم العصري بنجاح لاستقبال ملفات تشغيل القرآن وصوت الأذان والمنبه تلقائياً في التحديثات القادمة للبرنامج!',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 14, color: Colors.white60, height: 1.5),
               ),
