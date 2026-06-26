@@ -1,0 +1,101 @@
+import 'package:flutter/material.dart';
+import 'prayer_screen.dart';
+import 'azkar_screen.dart';
+import 'quran_screen.dart';
+import 'tasbih_screen.dart';
+import 'settings_screen.dart';
+
+void main() {
+  runApp(const AzkariAITopp());
+}
+
+class AzkariAITopp extends StatefulWidget {
+  const AzkariAITopp({super.key});
+
+  @override
+  State<AzkariAITopp> createState() => _AzkariAIToppState();
+}
+
+class _AzkariAIToppState extends State<AzkariAITopp> {
+  ThemeMode _themeMode = ThemeMode.dark;
+
+  void toggleTheme(bool isDark) {
+    setState(() {
+      _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'اذكاري AI',
+      debugShowCheckedModeBanner: false,
+      themeMode: _themeMode,
+      theme: ThemeData(
+        brightness: Brightness.light,
+        primarySwatch: Colors.deepPurple,
+        scaffoldBackgroundColor: const Color(0xFFF5F5FA),
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: const Color(0xFF121214),
+        primaryColor: const Color(0xFFBB86FC),
+        colorScheme: const ColorScheme.dark(
+          primary: Color(0xFF9D4EDD),
+          secondary: Color(0xFFE0AAFF),
+        ),
+      ),
+      home: HomeScreen(onThemeChanged: toggleTheme),
+    );
+  }
+}
+
+class HomeScreen extends StatefulWidget {
+  final Function(bool) onThemeChanged;
+  const HomeScreen({super.key, required this.onThemeChanged});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _currentIndex = 0;
+  late final List<Widget> _screens;
+
+  @override
+  void initState() {
+    super.initState();
+    _screens = [
+      const PrayerScreen(),
+      const AzkarScreen(),
+      const QuranScreen(),
+      const TasbihScreen(),
+      SettingsScreen(onThemeChanged: widget.onThemeChanged),
+    ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Directionality(
+        textDirection: TextDirection.rtl,
+        child: _screens[_currentIndex],
+      ),
+      bottomNavigationBar: Directionality(
+        textDirection: TextDirection.rtl,
+        child: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          type: BottomNavigationBarType.fixed,
+          onTap: (index) => setState(() => _currentIndex = index),
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.access_time), label: 'الصلاة'),
+            BottomNavigationBarItem(icon: Icon(Icons.import_contacts), label: 'الأذكار'),
+            BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: 'القرآن'),
+            BottomNavigationBarItem(icon: Icon(Icons.fingerprint), label: 'المسبحة'),
+            BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'الإعدادات'),
+          ],
+        ),
+      ),
+    );
+  }
+}
