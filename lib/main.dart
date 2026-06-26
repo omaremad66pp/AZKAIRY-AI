@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 void main() {
@@ -70,7 +69,7 @@ class AzkarCategoriesScreen extends StatelessWidget {
         {'text': 'آية الكرسي: اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ.', 'count': 1},
       ]},
       {'title': 'أذكار المساء', 'icon': Icons.brightness_3, 'color': Colors.purple.shade900, 'data': [
-        {'text': 'أَمْمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ وَالْحَمْدُ لِلَّهِ.', 'count': 1},
+        {'text': 'أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ وَالْحَمْدُ لِلَّهِ.', 'count': 1},
         {'text': 'قُلْ هُوَ اللَّهُ أَحَدٌ... (3 مرات)', 'count': 3},
       ]},
       {'title': 'أذكار الصلاة', 'icon': Icons.mosque, 'color': const Color(0xFF1E3A2F), 'data': [
@@ -272,7 +271,7 @@ class QuranPlaceholderScreen extends StatelessWidget {
               ),
               SizedBox(height: 15),
               Text(
-                'تمت تهيئة التصميم العصري بنجاح لاستقبل ملفات تشغيل القرآن وصوت الأذان والمنبه تلقائياً في التحديثات القادمة للبرنامج!',
+                'تمت تهيئة التصميم العصري بنجاح لاستقبال ملفات تشغيل القرآن وصوت الأذان والمنبه تلقائياً في التحديثات القادمة للبرنامج!',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 14, color: Colors.white60, height: 1.5),
               ),
@@ -282,4 +281,4 @@ class QuranPlaceholderScreen extends StatelessWidget {
       ),
     );
   }
-}                 
+}
