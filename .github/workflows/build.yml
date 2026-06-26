@@ -21,7 +21,10 @@ jobs:
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.x'
+        flutter-version: '3.19.x' # إصدار مستقر ومتوافق جداً
+
+    - name: Make Gradle Wrapper Executable
+      run: chmod +x android/gradlew # حل مشكلة صلاحيات الأندرويد الشائعة
 
     - name: Install dependencies
       run: flutter pub get
