@@ -26,7 +26,7 @@ jobs:
           flutter-version: '3.22.0'
 
       - name: Fix Missing Android Files
-        run: flutter create . --platforms=android
+        run: flutter create . --project-name=azkairy_ai --platforms=android
 
       - name: Install dependencies
         run: flutter pub get
