@@ -1,5 +1,5 @@
 
-import 'package:flutter/material.dart';
+   import 'package:flutter/material.dart';
 
 void main() {
   runApp(const IslamicLifeApp());
@@ -12,11 +12,10 @@ class IslamicLifeApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'حياة المسلم الداكن',
+      title: 'Islamic App',
       theme: ThemeData(
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0xFF0A0F0D), // خلفية سوداء إسلامية داكنة
-        fontFamily: 'Cairo',
+        scaffoldBackgroundColor: const Color(0xFF0A0F0D),
       ),
       home: const MainLayout(),
     );
@@ -47,9 +46,9 @@ class _MainLayoutState extends State<MainLayout> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (index) => setState(() => _selectedIndex = index),
-        selectedItemColor: const Color(0xFFD4AF37), // ذهبي لامع
-        unselectedItemColor: Colors.grey.shade500,
-        backgroundColor: const Color(0xFF121B17), // أخضر داكن جداً للقوائم
+        selectedItemColor: const Color(0xFFD4AF37),
+        unselectedItemColor: Colors.grey,
+        backgroundColor: const Color(0xFF121B17),
         type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: 'الأذكار'),
@@ -62,14 +61,13 @@ class _MainLayoutState extends State<MainLayout> {
   }
 }
 
-// 1. شاشة تصنيفات الأذكار المنظمة (مظهر داكن)
 class AzkarCategoriesScreen extends StatelessWidget {
   const AzkarCategoriesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final List<Map<String, dynamic>> categories = [
-      {'title': 'أذكار الصباح', 'icon': Icons.wb_sunny, 'color': Colors.amber.shade900, 'data': [
+      {'title': 'أذكار الصباح', 'icon': Icons.wb_sunny, 'color': Colors.orange.shade900, 'data': [
         {'text': 'أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ وَالْحَمْدُ لِلَّهِ.', 'count': 1},
         {'text': 'آية الكرسي: اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ.', 'count': 1},
       ]},
@@ -81,10 +79,10 @@ class AzkarCategoriesScreen extends StatelessWidget {
         {'text': 'أستغفر الله (ثلاثاً)، اللهم أنت السلام ومنك السلام.', 'count': 1},
         {'text': 'سبحان الله (33 مرة)، الحمد لله (33 مرة)، الله أكبر (33 مرة)', 'count': 33},
       ]},
-      {'title': 'أذكار السفر', 'icon': Icons.flight_takeoff, 'color': Colors.blueGrey.shade800, 'data': [
+      {'title': 'أذكار السفر', 'icon': Icons.flight_takeoff, 'color': Colors.blueGrey, 'data': [
         {'text': 'سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَٰذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ.', 'count': 1},
       ]},
-      {'title': 'أذكار الملبس', 'icon': Icons.checkroom, 'color': Colors.brown.shade800, 'data': [
+      {'title': 'أذكار الملبس', 'icon': Icons.checkroom, 'color': Colors.brown, 'data': [
         {'text': 'الحَمْدُ للَّهِ الَّذِي كَسَانِي هَذَا الثَّوْبَ وَرَزَقَنِيهِ مِنْ غَيْرِ حَوْلٍ مِنِّي وَلَا قُوَّةٍ.', 'count': 1},
       ]},
     ];
@@ -103,8 +101,6 @@ class AzkarCategoriesScreen extends StatelessWidget {
             return Card(
               color: const Color(0xFF16221C),
               margin: const EdgeInsets.symmetric(vertical: 8),
-              elevation: 4,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
               child: ListTile(
                 leading: CircleAvatar(
                   backgroundColor: categories[index]['color'],
@@ -156,7 +152,6 @@ class _AzkarDisplayScreenState extends State<AzkarDisplayScreen> {
       appBar: AppBar(
         title: Text(widget.title, style: const TextStyle(color: Color(0xFFD4AF37))),
         backgroundColor: const Color(0xFF121B17),
-        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: ListView.builder(
         itemCount: widget.azkarList.length,
@@ -164,7 +159,6 @@ class _AzkarDisplayScreenState extends State<AzkarDisplayScreen> {
           return Card(
             color: const Color(0xFF16221C),
             margin: const EdgeInsets.all(12),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -172,13 +166,12 @@ class _AzkarDisplayScreenState extends State<AzkarDisplayScreen> {
                   Text(
                     widget.azkarList[index]['text'],
                     textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 18, height: 1.6, color: Colors.whiteEfficacy),
+                    style: const TextStyle(fontSize: 18, height: 1.6),
                   ),
-                  const Divider(height: 25, color: Colors.white24),
+                  const Divider(height: 25),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: _counts[index] == 0 ? Colors.grey.shade800 : const Color(0xFFD4AF37),
-                      foregroundColor: _counts[index] == 0 ? Colors.white30 : Colors.black,
+                      backgroundColor: _counts[index] == 0 ? Colors.grey : const Color(0xFFD4AF37),
                     ),
                     onPressed: _counts[index] == 0 ? null : () {
                       setState(() {
@@ -197,7 +190,6 @@ class _AzkarDisplayScreenState extends State<AzkarDisplayScreen> {
   }
 }
 
-// 2. واجهة مواقيت الصلاة العصرية الداكنة
 class PrayerTimesScreen extends StatelessWidget {
   const PrayerTimesScreen({super.key});
 
@@ -251,10 +243,6 @@ class PrayerTimeRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: isNext ? const Color(0xFF1E3A2F) : const Color(0xFF16221C),
-      shape: RoundedRectangleBorder(
-        side: isNext ? const BorderSide(color: Color(0xFFD4AF37), width: 1.5) : BorderSide.none,
-        borderRadius: BorderRadius.circular(12),
-      ),
       margin: const EdgeInsets.symmetric(vertical: 6),
       child: ListTile(
         title: Text(name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: isNext ? const Color(0xFFD4AF37) : Colors.white)),
@@ -264,7 +252,6 @@ class PrayerTimeRow extends StatelessWidget {
   }
 }
 
-// 3. واجهة القرآن الكريم والأصوات الداكنة
 class QuranPlaceholderScreen extends StatelessWidget {
   const QuranPlaceholderScreen({super.key});
 
@@ -287,7 +274,7 @@ class QuranPlaceholderScreen extends StatelessWidget {
               ),
               SizedBox(height: 15),
               Text(
-                'لتشغيل الـ 114 سورة كاملة لجميع القراء (المنشاوي، عبد الباسط) وسماع صوت "الله أكبر" في وقت الأذان الفعلي وتفعيل منبه الفجر الذكي، ستحتاج في المراحل المتقدمة لربط الكود بملفات صوتية ومكتبات أندرويد الخارجية (Background Services). تم تجهيز الواجهة العصرية لتستقبل الأكواد الصوتية لاحقاً!',
+                'تمت تهيئة التصميم العصري بنجاح لاستقبل ملفات تشغيل القرآن وصوت الأذان والمنبه تلقائياً في التحديثات القادمة للبرنامج!',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 14, color: Colors.white60, height: 1.5),
               ),
@@ -299,7 +286,6 @@ class QuranPlaceholderScreen extends StatelessWidget {
   }
 }
 
-// 4. السبحة المتطورة بمظهر داكن فاخر
 class AdvancedSebhaScreen extends StatefulWidget {
   const AdvancedSebhaScreen({super.key});
 
@@ -328,16 +314,15 @@ class _AdvancedSebhaScreenState extends State<AdvancedSebhaScreen> {
                   color: const Color(0xFF121B17),
                   shape: BoxShape.circle,
                   border: Border.all(color: const Color(0xFFD4AF37), width: 2),
-                  boxShadow: const [BoxShadow(color: Colors.black54, blurRadius: 15, offset: Offset(0, 5))],
                 ),
                 child: const Center(child: Text('اضغط\nللتسبيح', textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold))),
               ),
             ),
             const SizedBox(height: 30),
-            TextButton(onPressed: () => setState(() => _counter = 0), child: const Text('إعادة تصفير', style: TextStyle(color: Colors.redAccent, fontSize: 16))),
+            TextButton(onPressed: () => setState(() => _counter = 0), child: const Text('إعادة تصفير', style: TextStyle(color: Colors.red, fontSize: 16))),
           ],
         ),
       ),
     );
   }
-}  
+}
