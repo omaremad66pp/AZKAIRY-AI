@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -35,7 +36,6 @@ class _MainLayoutState extends State<MainLayout> {
     const AzkarCategoriesScreen(),
     const PrayerTimesScreen(),
     const QuranPlaceholderScreen(),
-    const AdvancedSebhaScreen(),
   ];
 
   @override
@@ -53,7 +53,6 @@ class _MainLayoutState extends State<MainLayout> {
           BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: 'الأذكار'),
           BottomNavigationBarItem(icon: Icon(Icons.access_time), label: 'الصلاة'),
           BottomNavigationBarItem(icon: Icon(Icons.chrome_reader_mode), label: 'القرآن'),
-          BottomNavigationBarItem(icon: Icon(Icons.fingerprint), label: 'السبحة'),
         ],
       ),
     );
@@ -71,7 +70,7 @@ class AzkarCategoriesScreen extends StatelessWidget {
         {'text': 'آية الكرسي: اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ.', 'count': 1},
       ]},
       {'title': 'أذكار المساء', 'icon': Icons.brightness_3, 'color': Colors.purple.shade900, 'data': [
-        {'text': 'أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ وَالْحَمْدُ لِلَّهِ.', 'count': 1},
+        {'text': 'أَمْمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ وَالْحَمْدُ لِلَّهِ.', 'count': 1},
         {'text': 'قُلْ هُوَ اللَّهُ أَحَدٌ... (3 مرات)', 'count': 3},
       ]},
       {'title': 'أذكار الصلاة', 'icon': Icons.mosque, 'color': const Color(0xFF1E3A2F), 'data': [
@@ -273,7 +272,7 @@ class QuranPlaceholderScreen extends StatelessWidget {
               ),
               SizedBox(height: 15),
               Text(
-                'تمت تهيئة التصميم العصري بنجاح لاستقبال ملفات تشغيل القرآن وصوت الأذان والمنبه تلقائياً في التحديثات القادمة للبرنامج!',
+                'تمت تهيئة التصميم العصري بنجاح لاستقبل ملفات تشغيل القرآن وصوت الأذان والمنبه تلقائياً في التحديثات القادمة للبرنامج!',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 14, color: Colors.white60, height: 1.5),
               ),
@@ -283,45 +282,4 @@ class QuranPlaceholderScreen extends StatelessWidget {
       ),
     );
   }
-}
-
-class AdvancedSebhaScreen extends StatefulWidget {
-  const AdvancedSebhaScreen({super.key});
-
-  @override
-  State<AdvancedSebhaScreen> createState() => _AdvancedSebhaScreenState();
-}
-
-class _AdvancedSebhaScreenState extends State<AdvancedSebhaScreen> {
-  int _counter = 0;
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('السبحة الذكية', style: TextStyle(color: Color(0xFFD4AF37))), backgroundColor: const Color(0xFF121B17)),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('$_counter', style: const TextStyle(fontSize: 64, fontWeight: FontWeight.bold, color: Color(0xFFD4AF37))),
-            const SizedBox(height: 40),
-            GestureDetector(
-              onTap: () => setState(() => _counter++),
-              child: Container(
-                width: 180,
-                height: 180,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF121B17),
-                  shape: BoxShape.circle,
-                  border: Border.all(color: const Color(0xFFD4AF37), width: 2),
-                ),
-                child: const Center(child: Text('اضغط\nللتسبيح', textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold))),
-              ),
-            ),
-            const SizedBox(height: 30),
-            TextButton(onPressed: () => setState(() => _counter = 0), child: const Text('إعادة تصفير', style: TextStyle(color: Colors.red, fontSize: 16))),
-          ],
-        ),
-      ),
-    );
-  }
-}
+}                 
