@@ -1,4 +1,6 @@
-import 'dart:async';
+
+      
+    import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -493,4 +495,72 @@ class _AlarmTabState extends State<AlarmTab> {
                     TextField(
                       controller: _aiController,
                       textAlign: TextAlign.right,
-                      decoratio
+                      decoration: InputDecoration(
+                        hintText: 'اسأل المساعد الذكي عن فضل ذكر معين...',
+                        suffixIcon: IconButton(icon: const Icon(Icons.send, color: Color(0xFF9D8BFF)), onPressed: _askAI),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 25),
+            Card(
+              color: Theme.of(context).cardColor,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    const Icon(Icons.alarm_on, size: 45, color: Colors.greenAccent),
+                    const SizedBox(height: 8),
+                    const Text('نظام الاستيقاظ ومنبه الفجر بالذكاء الرياضي', style: TextStyle(fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 12),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF5D48B7)),
+                      onPressed: _testSmartAlarm,
+                      child: const Text('اختبر فك قفل المنبه بالأسئلة الآن', style: TextStyle(color: Colors.white)),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SettingsTab extends StatelessWidget {
+  final Function(bool) onThemeChanged;
+  const SettingsTab({Key? key, required this.onThemeChanged}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('الإعدادات العامة'), backgroundColor: const Color(0xFF161926), centerTitle: true),
+      body: ListView(
+        children: [
+          SwitchListTile(
+            title: const Text('مظهر الشاشة الداكن (Dark Mode)'),
+            value: true,
+            activeColor: const Color(0xFF9D8BFF),
+            onChanged: (v) => onThemeChanged(v),
+          ),
+          const ListTile(
+            leading: Icon(Icons.offline_bolt, color: Colors.greenAccent),
+            title: Text('حالة خادم التطبيق المحلي'),
+            subtitle: Text('جميع الأنظمة تعمل محلياً وأوفلاين مستقر 100%'),
+          ),
+          const ListTile(
+            leading: Icon(Icons.info_outline, color: Colors.white30),
+            title: Text('نسخة التطبيق المعالجة'),
+            subtitle: Text('Azkari AI Full - v2.0.0'),
+          )
+        ],
+      ),
+    );
+  }
+}
