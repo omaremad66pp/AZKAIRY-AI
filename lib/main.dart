@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -15,16 +13,7 @@ class AzkariAIApp extends StatefulWidget {
 }
 
 class _AzkariAIAppState extends State<AzkariAIApp> {
-  ThemeMode _themeMode = ThemeMode.dark;
-  double _fontSize = 24.0;
-  bool _isSmartAlarmEnabled = true;
-  String _lastOpenedSurah = "الفاتحة";
-
-  void toggleTheme(bool isDark) {
-    setState(() {
-      _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
-    });
-  }
+  final ThemeMode _themeMode = ThemeMode.dark;
 
   @override
   Widget build(BuildContext context) {
@@ -37,21 +26,18 @@ class _AzkariAIAppState extends State<AzkariAIApp> {
         scaffoldBackgroundColor: const Color(0xFFF5F6FA),
         primaryColor: const Color(0xFF4A37A0),
         cardColor: Colors.white,
-        fontFamily: 'Cairo',
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
         scaffoldBackgroundColor: const Color(0xFF0B0D16),
         primaryColor: const Color(0xFF6C5DD3),
         cardColor: const Color(0xFF141724),
-        fontFamily: 'Cairo',
       ),
       home: const DailyWirdSplashScreen(),
     );
   }
 }
 
-// 1. شاشة الورد اليومي عند الفتح
 class DailyWirdSplashScreen extends StatelessWidget {
   const DailyWirdSplashScreen({Key? key}) : super(key: key);
 
@@ -117,7 +103,6 @@ class DailyWirdSplashScreen extends StatelessWidget {
   }
 }
 
-// شاشة التنقل الرئيسية (Bottom Navigation)
 class MainLayoutScreen extends StatefulWidget {
   const MainLayoutScreen({Key? key}) : super(key: key);
 
@@ -126,7 +111,7 @@ class MainLayoutScreen extends StatefulWidget {
 }
 
 class _MainLayoutScreenState extends State<MainLayoutScreen> {
-  int _currentIndex = 4; // تبدأ على شاشة الصلاة الرئيسية
+  int _currentIndex = 4;
 
   final List<Widget> _tabs = [
     const SettingsTab(),
@@ -161,7 +146,6 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
   }
 }
 
-// 2. الشاشة الأولى: الصلاة والقبلة والمنبه الرياضي
 class PrayerTab extends StatefulWidget {
   const PrayerTab({Key? key}) : super(key: key);
   @override
@@ -234,7 +218,6 @@ class _PrayerTabState extends State<PrayerTab> {
   }
 
   void _startSmartAlarmChallenge() {
-    int score = 0;
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -265,7 +248,6 @@ class _PrayerTabState extends State<PrayerTab> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // القسم العلوي: عداد تنازلي وبوصلة
             Row(
               children: [
                 Expanded(
@@ -303,16 +285,14 @@ class _PrayerTabState extends State<PrayerTab> {
               ],
             ),
             const SizedBox(height: 20),
-            // قائمة الصلوات
             const Align(alignment: Alignment.centerRight, child: Text('مواقيت الصلاة اليومية', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))),
             const SizedBox(height: 10),
             _buildPrayerCard('الفجر', '04:05 ص', '🌅', 'أول البركات ونور للوجه', 'من صلى الفجر في جماعة فهو في ذمة الله', 'اللهم بك أصبحنا.. آية الكرسي'),
-            _buildPrayerCard('الظهر', '12:57 م', '☀️', 'نور الغداء وبركة الرزق', 'إنها ساعة تفتح فيها أبواب السماء', 'الاستغفار والتسبيح 33'),
+            _buildPrayerCard('الظهر', '12:57 م', '☀️', 'نور الغداء بركة الرزق', 'إنها ساعة تفتح فيها أبواب السماء', 'الاستغفار والتسبيح 33'),
             _buildPrayerCard('العصر', '04:33 م', '⛅', 'الصلاة الوسطى المباركة', 'من ترك صلاة العصر فقد حبط عمله', 'أذكار المساء المأثورة'),
             _buildPrayerCard('المغرب', '08:00 م', '🌇', 'بداية الليل والسكينة', 'لا تزال أمتي بخير ما لم يؤخروا المغرب', 'سورة الإخلاص والمعوذتين'),
             _buildPrayerCard('العشاء', '09:34 م', '🌌', 'راحة البدن وحصن النوم', 'من صلى العشاء في جماعة فكأنما قام نصف الليل', 'الملك وسبحان الله'),
             const SizedBox(height: 20),
-            // تتبع الصلاة والجوائز
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(color: const Color(0xFF1A1A2F), borderRadius: BorderRadius.circular(16), border: Border.all(color: Colors.amber, width: 0.5)),
@@ -348,7 +328,6 @@ class _PrayerTabState extends State<PrayerTab> {
               ),
             ),
             const SizedBox(height: 15),
-            // كارت منبه الفجر الذكي
             Card(
               color: Colors.redAccent.withOpacity(0.1),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Colors.redAccent)),
@@ -390,7 +369,6 @@ class _PrayerTabState extends State<PrayerTab> {
   }
 }
 
-// 3. الشاشة الثانية: الأذكار والمسبحة
 class AzkarTab extends StatefulWidget {
   const AzkarTab({Key? key}) : super(key: key);
   @override
@@ -423,7 +401,6 @@ class _AzkarTabState extends State<AzkarTab> {
         ),
         body: TabBarView(
           children: [
-            // واجهة الأذكار والبحث
             Column(
               children: [
                 Padding(
@@ -464,8 +441,20 @@ class _AzkarTabState extends State<AzkarTab> {
                 )
               ],
             ),
-            // واجهة المسبحة
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('أستغفر الله العظيم وأتوب إليه', style: Te
+                const Text(
+                  'أستغفر الله العظيم وأتوب إليه',
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 40),
+                GestureDetector(
+                  onTap: () { setState(() => _tasbihCounter++); HapticFeedback.vibrate(); },
+                  child: Container(
+                    width: 180, height: 180,
+                    decoration: const BoxDecoration(shape: BoxShape.circle, color: Color(0xFF6C5DD3)),
+                    child: Center(child: Text('$_tasbihCounter', style: const TextStyle(fontSize: 48, color: Colors.white, fontWeight: FontWeight.bold))),
+                  ),
+                ),
+                TextButton(onPressed: () => setState(() => _tasbihCounter = 0), child: const Text('تصفير العداد'
