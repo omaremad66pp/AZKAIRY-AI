@@ -16,113 +16,152 @@ class AzkariAIApp extends StatefulWidget {
 
 class _AzkariAIAppState extends State<AzkariAIApp> {
   ThemeMode _themeMode = ThemeMode.dark;
-  double _fontSize = 22.0;
+  double _fontSize = 24.0;
   bool _isSmartAlarmEnabled = true;
+  String _lastOpenedSurah = "الفاتحة";
 
   void toggleTheme(bool isDark) {
-    setState(() { _themeMode = isDark ? ThemeMode.dark : ThemeMode.light; });
-  }
-
-  void updateFontSize(double size) {
-    setState(() { _fontSize = size; });
-  }
-
-  void toggleAlarmSetting(bool value) {
-    setState(() { _isSmartAlarmEnabled = value; });
+    setState(() {
+      _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'أذكاري AI الأسطوري',
+      title: 'أذكاري AI',
       themeMode: _themeMode,
       theme: ThemeData(
         brightness: Brightness.light,
-        scaffoldBackgroundColor: Colors.grey[100],
-        primaryColor: const Color(0xFF5D48B7),
+        scaffoldBackgroundColor: const Color(0xFFF5F6FA),
+        primaryColor: const Color(0xFF4A37A0),
         cardColor: Colors.white,
+        fontFamily: 'Cairo',
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0xFF0F111E),
-        primaryColor: const Color(0xFF5D48B7),
-        cardColor: const Color(0xFF1B1E2E),
+        scaffoldBackgroundColor: const Color(0xFF0B0D16),
+        primaryColor: const Color(0xFF6C5DD3),
+        cardColor: const Color(0xFF141724),
+        fontFamily: 'Cairo',
       ),
-      home: MainLayoutScreen(
-        onThemeChanged: toggleTheme,
-        fontSize: _fontSize,
-        onFontSizeChanged: updateFontSize,
-        isSmartAlarmEnabled: _isSmartAlarmEnabled,
-        onAlarmSettingChanged: toggleAlarmSetting,
+      home: const DailyWirdSplashScreen(),
+    );
+  }
+}
+
+// 1. شاشة الورد اليومي عند الفتح
+class DailyWirdSplashScreen extends StatelessWidget {
+  const DailyWirdSplashScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF0B0D16), Color(0xFF1C1B35)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.auto_awesome, size: 80, color: Colors.amber),
+                const SizedBox(height: 20),
+                const Text(
+                  '✨ وردك اليومي المبارك ✨',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.amber),
+                ),
+                const SizedBox(height: 30),
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.08),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Colors.amber.withOpacity(0.3)),
+                  ),
+                  child: const Text(
+                    '📌 آية اليوم:\n"وَاصْبِرْ لِحُكْمِ رَبِّكَ فَإِنَّكَ بِأَعْيُنِنَا ۖ وَسَبِّحْ بِحَمْدِ رَبِّكَ حِينَ تَقُومُ"\n\n💡 ذكر اليوم:\nأستغفر الله العظيم وأتوب إليه (100 مرة)',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 18, height: 1.6, color: Colors.white),
+                  ),
+                ),
+                const SizedBox(height: 40),
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF6C5DD3),
+                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                    shape: BorderRadius.circular(30),
+                  ),
+                  icon: const Icon(Icons.mosque, color: Colors.white),
+                  label: const Text('دخول أذكاري AI', style: TextStyle(fontSize: 18, color: Colors.white)),
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => const MainLayoutScreen()),
+                    );
+                  },
+                )
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
 }
 
+// شاشة التنقل الرئيسية (Bottom Navigation)
 class MainLayoutScreen extends StatefulWidget {
-  final Function(bool) onThemeChanged;
-  final double fontSize;
-  final Function(double) onFontSizeChanged;
-  final bool isSmartAlarmEnabled;
-  final Function(bool) onAlarmSettingChanged;
-
-  const MainLayoutScreen({
-    Key? key,
-    required this.onThemeChanged,
-    required this.fontSize,
-    required this.onFontSizeChanged,
-    required this.isSmartAlarmEnabled,
-    required this.onAlarmSettingChanged,
-  }) : super(key: key);
+  const MainLayoutScreen({Key? key}) : super(key: key);
 
   @override
   State<MainLayoutScreen> createState() => _MainLayoutScreenState();
 }
 
 class _MainLayoutScreenState extends State<MainLayoutScreen> {
-  int _currentIndex = 3; // يفتح على القرآن مباشرة تلقائياً
-  late List<Widget> _screens;
+  int _currentIndex = 4; // تبدأ على شاشة الصلاة الرئيسية
+
+  final List<Widget> _tabs = [
+    const SettingsTab(),
+    const AISmartTab(),
+    const QuranTab(),
+    const AzkarTab(),
+    const PrayerTab(),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    _screens = [
-      SettingsTab(
-        onThemeChanged: widget.onThemeChanged,
-        fontSize: widget.fontSize,
-        onFontSizeChanged: widget.onFontSizeChanged,
-        isSmartAlarmEnabled: widget.isSmartAlarmEnabled,
-        onAlarmSettingChanged: widget.onAlarmSettingChanged,
-      ),
-      AlarmTab(isSmartAlarmEnabled: widget.isSmartAlarmEnabled),
-      const AzkarTab(),
-      QuranTab(fontSize: widget.fontSize),
-      const PrayerTab(),
-    ];
-
     return Scaffold(
-      body: _screens[_currentIndex],
+      body: _tabs[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) => setState(() => _currentIndex = index),
         type: BottomNavigationBarType.fixed,
-        backgroundColor: const Color(0xFF161926),
-        selectedItemColor: const Color(0xFF9D8BFF),
-        unselectedItemColor: Colors.white38,
-        selectedFontSize: 11,
+        backgroundColor: const Color(0xFF111322),
+        selectedItemColor: Colors.amber,
+        unselectedItemColor: Colors.white54,
+        selectedFontSize: 12,
         unselectedFontSize: 11,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.settings_outlined), label: 'الإعدادات'),
-          BottomNavigationBarItem(icon: Icon(Icons.psychology_outlined), label: 'مساعد AI'),
-          BottomNavigationBarItem(icon: Icon(Icons.volunteer_activism_outlined), label: 'الأذكار'),
-          BottomNavigationBarItem(icon: Icon(Icons.menu_book_outlined), label: 'القرآن'),
-          BottomNavigationBarItem(icon: Icon(Icons.mosque_outlined), label: 'الصلوات'),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'الإعدادات'),
+          BottomNavigationBarItem(icon: Icon(Icons.psychology), label: 'أذكاري AI'),
+          BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: 'القرآن'),
+          BottomNavigationBarItem(icon: Icon(Icons.brightness_7), label: 'الأذكار'),
+          BottomNavigationBarItem(icon: Icon(Icons.access_time_filled), label: 'الصلاة'),
         ],
       ),
     );
   }
 }
 
+// 2. الشاشة الأولى: الصلاة والقبلة والمنبه الرياضي
 class PrayerTab extends StatefulWidget {
   const PrayerTab({Key? key}) : super(key: key);
   @override
@@ -130,198 +169,195 @@ class PrayerTab extends StatefulWidget {
 }
 
 class _PrayerTabState extends State<PrayerTab> {
-  double _compassAngle = 0.0;
+  double _compassAngle = 0.4;
+  int _scorePoints = 150;
+  final Map<String, bool> _trackedPrayers = {
+    "الفجر": true, "الظهر": false, "العصر": false, "المغرب": false, "العشاء": false
+  };
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('مواقيت الصلاة والقبلة'), backgroundColor: const Color(0xFF161926), centerTitle: true),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            const Text('بوصلة اتجاه القبلة التفاعلية الذكية', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            const Text('حرك البوصلة بإصبعك لتحديد اتجاه الكعبة الشريفة محلياً', style: TextStyle(fontSize: 12, color: Colors.grey)),
-            const SizedBox(height: 15),
-            GestureDetector(
-              onPanUpdate: (details) {
-                setState(() { _compassAngle += details.delta.dx * 0.02; });
-              },
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    width: 200, height: 200,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: const Color(0xFF9D8BFF), width: 4),
-                      color: Theme.of(context).cardColor,
-                    ),
-                  ),
-                  Transform.rotate(
-                    angle: _compassAngle,
-                    child: const Icon(Icons.navigation, size: 100, color: Color(0xFF9D8BFF)),
-                  ),
-                  const Positioned(top: 15, child: Text('🕋 مكة', style: TextStyle(fontWeight: FontWeight.bold))),
-                ],
+  void _showAdhanSettings(String prayerName) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: const Color(0xFF141724),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('إعدادات أذان صلاة $prayerName', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.amber)),
+              const Divider(color: Colors.white24),
+              ListTile(
+                leading: const Icon(Icons.volume_up, color: Colors.amber),
+                title: const Text('مستوى صوت الأذان'),
+                trailing: SizedBox(width: 150, child: Slider(value: 0.8, onChanged: (v) {}, activeColor: Colors.amber)),
               ),
-            ),
-            const SizedBox(height: 25),
-            Container(
-              decoration: BoxDecoration(color: Theme.of(context).cardColor, borderRadius: BorderRadius.circular(16)),
-              child: Column(
-                children: [
-                  _buildPrayerRow('الفجر', '4:05 ص', Icons.wb_twilight),
-                  _buildPrayerRow('الظهر', '12:57 م', Icons.wb_sunny),
-                  _buildPrayerRow('العصر', '4:33 م', Icons.filter_drama),
-                  _buildPrayerRow('المغرب', '8:00 م', Icons.wb_cloudy),
-                  _buildPrayerRow('العشاء', '9:34 م', Icons.nightlight_round),
-                ],
-              ),
-            )
-          ],
+              SwitchListTile(title: const Text('تفعيل صوت التنبيه'), value: true, onChanged: (v) {}, activeColor: Colors.amber),
+              SwitchListTile(title: const Text('التفعيل في الوضع الصامت'), value: true, onChanged: (v) {}, activeColor: Colors.amber),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF6C5DD3)),
+                onPressed: () => Navigator.pop(context),
+                child: const Text('حفظ التفضيلات', style: TextStyle(color: Colors.white)),
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showPrayerDetails(String name, String fadl, String hadith, String azkar) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF141724),
+        title: Text('فضائل صلاة $name', textAlign: TextAlign.center, style: const TextStyle(color: Colors.amber)),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Text('💡 فضلها:', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.amber)),
+              Text(fadl, textDirection: TextDirection.rtl),
+              const SizedBox(height: 10),
+              const Text('📜 حديث شريف:', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.amber)),
+              Text(hadith, textDirection: TextDirection.rtl),
+              const SizedBox(height: 10),
+              const Text('📿 أذكارها المنصوح بها:', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.amber)),
+              Text(azkar, textDirection: TextDirection.rtl),
+            ],
+          ),
         ),
+        actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('تم', style: TextStyle(color: Colors.amber)))],
       ),
     );
   }
 
-  Widget _buildPrayerRow(String name, String time, IconData icon) {
-    return Padding(
-      padding: const EdgeInsets.all(14.0),
-      child: Row(
-        children: [
-          Text(time, style: const TextStyle(fontSize: 15)),
-          const Spacer(),
-          Text(name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-          const SizedBox(width: 10),
-          Icon(icon, color: const Color(0xFF9D8BFF)),
+  void _startSmartAlarmChallenge() {
+    int score = 0;
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF141724),
+        title: const Text('🚨 تحدي الفجر الرياضي الذكي', textAlign: TextAlign.center, style: TextStyle(color: Colors.redAccent)),
+        content: const Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('المنبه لن يتوقف! أجب عن الأسئلة لفك القفل بنجاح:', textAlign: TextAlign.center),
+            SizedBox(height: 15),
+            Text('السؤال 1: ما هي أول صلاة فرضت في الإسلام؟', style: TextStyle(fontWeight: FontWeight.bold)),
+          ],
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('صلاة الفجر')),
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('صلاة الظهر')),
         ],
       ),
     );
   }
-}
-
-class QuranTab extends StatefulWidget {
-  final double fontSize;
-  const QuranTab({Key? key, required this.fontSize}) : super(key: key);
-
-  @override
-  State<QuranTab> createState() => _QuranTabState();
-}
-
-class _QuranTabState extends State<QuranTab> {
-  List _surahs = [];
-  bool _isLoading = true;
-  String _errorMsg = '';
-
-  Future<void> loadQuranData() async {
-    try {
-      final String response = await rootBundle.loadString('assets/quran.json');
-      final data = await json.decode(response);
-      setState(() {
-        _surahs = data['surahs'] ?? data['data'] ?? [];
-        _isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        _errorMsg = 'تأكد من إعداد ملف pubspec.yaml والمسار بشكل صحيح.';
-        _isLoading = false;
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    loadQuranData();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('المصحف الشريف الكامل (أوفلاين)'), backgroundColor: const Color(0xFF161926), centerTitle: true),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator(color: Color(0xFF9D8BFF)))
-          : _errorMsg.isNotEmpty
-              ? Center(child: Padding(padding: const EdgeInsets.all(16.0), child: Text(_errorMsg, textAlign: TextAlign.center, style: const TextStyle(color: Colors.redAccent))))
-              : ListView.builder(
-                  itemCount: _surahs.length,
-                  itemBuilder: (context, index) {
-                    final surah = _surahs[index];
-                    final int surahNum = surah['number'] ?? (index + 1);
-                    final String surahName = surah['name'] ?? 'سورة جديدة';
-                    final List ayahsList = surah['ayahs'] ?? [];
-
-                    return Card(
-                      color: Theme.of(context).cardColor,
-                      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                      child: ListTile(
-                        trailing: CircleAvatar(
-                          backgroundColor: const Color(0xFF5D48B7),
-                          child: Text('$surahNum', style: const TextStyle(color: Colors.white, fontSize: 12)),
-                        ),
-                        title: Text(surahName, textAlign: TextAlign.right, style: const TextStyle(fontWeight: FontWeight.bold)),
-                        subtitle: Text('عدد الآيات الحقيقية: ${ayahsList.length}', textAlign: TextAlign.right),
-                        leading: const Icon(Icons.chrome_reader_mode, color: Color(0xFF9D8BFF)),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => RealSurahViewer(
-                                name: surahName,
-                                ayahs: ayahsList,
-                                fontSize: widget.fontSize,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  },
-                ),
-    );
-  }
-}
-
-class RealSurahViewer extends StatelessWidget {
-  final String name;
-  final List ayahs;
-  final double fontSize;
-
-  const RealSurahViewer({Key? key, required this.name, required this.ayahs, required this.fontSize}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('سورة $name'), backgroundColor: const Color(0xFF161926)),
-      body: Padding(
+      appBar: AppBar(title: const Text('أوقات الصلاة والقبلة'), backgroundColor: const Color(0xFF111322), centerTitle: true),
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            if (name != "التوبة" && name != "سورة التوبة")
-              const Text(
-                "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.amber),
-                textAlign: TextAlign.center,
-              ),
-            const SizedBox(height: 15),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: Wrap(
-                    spacing: 6,
-                    runSpacing: 10,
-                    children: List.generate(ayahs.length, (index) {
-                      final String text = ayahs[index]['text'] ?? '';
-                      return Text(
-                        '$text ﴿${index + 1}﴾ ',
-                        style: TextStyle(fontSize: fontSize, height: 1.8),
-                        textAlign: TextAlign.justify,
-                      );
-                    }),
+            // القسم العلوي: عداد تنازلي وبوصلة
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    height: 140,
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(color: Theme.of(context).cardColor, borderRadius: BorderRadius.circular(16)),
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('الصلاة القادمة: العصر', style: TextStyle(fontSize: 14, color: Colors.white60)),
+                        SizedBox(height: 5),
+                        Text('خلال 01:24:05', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.amber)),
+                        SizedBox(height: 5),
+                        Text('الأحد ٢٨ يونيو ٢٠٢٦', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                      ],
+                    ),
                   ),
                 ),
+                const SizedBox(width: 12),
+                GestureDetector(
+                  onPanUpdate: (d) => setState(() => _compassAngle += d.delta.dx * 0.01),
+                  child: Container(
+                    width: 140, height: 140,
+                    decoration: BoxDecoration(color: Theme.of(context).cardColor, shape: BoxShape.circle),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Transform.rotate(angle: _compassAngle, child: const Icon(Icons.explore, size: 90, color: Colors.amber)),
+                        const Positioned(top: 10, child: Text('🕋 القبلة', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold))),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            // قائمة الصلوات
+            const Align(alignment: Alignment.centerRight, child: Text('مواقيت الصلاة اليومية', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))),
+            const SizedBox(height: 10),
+            _buildPrayerCard('الفجر', '04:05 ص', '🌅', 'أول البركات ونور للوجه', 'من صلى الفجر في جماعة فهو في ذمة الله', 'اللهم بك أصبحنا.. آية الكرسي'),
+            _buildPrayerCard('الظهر', '12:57 م', '☀️', 'نور الغداء وبركة الرزق', 'إنها ساعة تفتح فيها أبواب السماء', 'الاستغفار والتسبيح 33'),
+            _buildPrayerCard('العصر', '04:33 م', '⛅', 'الصلاة الوسطى المباركة', 'من ترك صلاة العصر فقد حبط عمله', 'أذكار المساء المأثورة'),
+            _buildPrayerCard('المغرب', '08:00 م', '🌇', 'بداية الليل والسكينة', 'لا تزال أمتي بخير ما لم يؤخروا المغرب', 'سورة الإخلاص والمعوذتين'),
+            _buildPrayerCard('العشاء', '09:34 م', '🌌', 'راحة البدن وحصن النوم', 'من صلى العشاء في جماعة فكأنما قام نصف الليل', 'الملك وسبحان الله'),
+            const SizedBox(height: 20),
+            // تتبع الصلاة والجوائز
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(color: const Color(0xFF1A1A2F), borderRadius: BorderRadius.circular(16), border: Border.all(color: Colors.amber, width: 0.5)),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('🏆 نقاطك الحالية: $_scorePoints نقطة', style: const TextStyle(color: Colors.amber, fontWeight: FontWeight.bold)),
+                      const Text('🔥 تتبع نظام جوائز الصلوات', style: TextStyle(fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: _trackedPrayers.keys.map((pName) {
+                      return Column(
+                        children: [
+                          Text(pName, style: const TextStyle(fontSize: 12)),
+                          Checkbox(
+                            value: _trackedPrayers[pName],
+                            activeColor: Colors.amber,
+                            onChanged: (v) => setState(() {
+                              _trackedPrayers[pName] = v!;
+                              _scorePoints += v ? 50 : -50;
+                            }),
+                          )
+                        ],
+                      );
+                    }).toList(),
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(height: 15),
+            // كارت منبه الفجر الذكي
+            Card(
+              color: Colors.redAccent.withOpacity(0.1),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Colors.redAccent)),
+              child: ListTile(
+                leading: const Icon(Icons.alarm, color: Colors.redAccent, size: 30),
+                title: const Text('منبه الفجر الرياضي الذكي عالي التنبيه', style: TextStyle(fontWeight: FontWeight.bold)),
+                subtitle: const Text('تحديات أسئلة ثقافية دينية لإجبارك على الاستيقاظ'),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                onTap: _startSmartAlarmChallenge,
               ),
             ),
           ],
@@ -329,8 +365,32 @@ class RealSurahViewer extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildPrayerCard(String name, String time, String emoji, String fadl, String hadith, String azkar) {
+    return Card(
+      color: Theme.of(context).cardColor,
+      margin: const EdgeInsets.symmetric(vertical: 5),
+      child: ListTile(
+        onTap: () => _showPrayerDetails(name, fadl, hadith, azkar),
+        leading: Text(emoji, style: const TextStyle(fontSize: 28)),
+        title: Row(
+          children: [
+            Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
+            const Spacer(),
+            Text(time, style: const TextStyle(color: Colors.amber, fontWeight: FontWeight.bold)),
+          ],
+        ),
+        subtitle: const Text('انقر لقراءة فضل الصلاة والأحاديث الخاصة بها 💡', style: TextStyle(fontSize: 11)),
+        trailing: IconButton(
+          icon: const Icon(Icons.volume_up, color: Colors.white38),
+          onPressed: () => _showAdhanSettings(name),
+        ),
+      ),
+    );
+  }
 }
 
+// 3. الشاشة الثانية: الأذكار والمسبحة
 class AzkarTab extends StatefulWidget {
   const AzkarTab({Key? key}) : super(key: key);
   @override
@@ -338,11 +398,15 @@ class AzkarTab extends StatefulWidget {
 }
 
 class _AzkarTabState extends State<AzkarTab> {
-  int _counter = 0;
-  final List<String> _azkar = [
-    "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لا شريك له.",
-    "يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ أَصْلِحْ لِي شَأْنِي كُلَّهُ وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ.",
-    "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ خَلقتَنِي وَأَنَا عَبْدُكَ وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ."
+  int _tasbihCounter = 0;
+  String _searchQuery = "";
+  final List<Map<String, String>> _categories = [
+    {"name": "أذكار الصباح", "icon": "☀️", "trans": "Morning Azkar"},
+    {"name": "أذكار المساء", "icon": "🌙", "trans": "Evening Azkar"},
+    {"name": "أذكار السفر", "icon": "✈️", "trans": "Travel Supplications"},
+    {"name": "أذكار الطعام والشراب", "icon": "🍏", "trans": "Food & Drink"},
+    {"name": "أذكار النوم والاستيقاظ", "icon": "🛌", "trans": "Sleep & Wakeup"},
+    {"name": "أذكار النجاح والمرض", "icon": "🏥", "trans": "Cure & Success"},
   ];
 
   @override
@@ -351,185 +415,57 @@ class _AzkarTabState extends State<AzkarTab> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color(0xFF161926),
-          bottom: const TabBar(
-            tabs: [Tab(text: 'المسبحة الذكية'), Tab(text: 'قائمة الأذكار')],
-            indicatorColor: Color(0xFF9D8BFF),
+          backgroundColor: const Color(0xFF111322),
+          title: const TabBar(
+            indicatorColor: Colors.amber,
+            tabs: [Tab(text: 'جميع الأذكار'), Tab(text: 'المسبحة الإلكترونية')],
           ),
         ),
         body: TabBarView(
           children: [
+            // واجهة الأذكار والبحث
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: TextField(
+                    onChanged: (v) => setState(() => _searchQuery = v),
+                    textAlign: TextDirection.rtl,
+                    decoration: InputDecoration(
+                      hintText: '🔍 ابحث في جميع أذكار الدنيا والآخرة...',
+                      filled: true,
+                      fillColor: Theme.of(context).cardColor,
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: _categories.length,
+                    itemBuilder: (context, i) {
+                      if (_searchQuery.isNotEmpty && !_categories[i]["name"]!.contains(_searchQuery)) {
+                        return const SizedBox();
+                      }
+                      return Card(
+                        color: Theme.of(context).cardColor,
+                        margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                        child: ListTile(
+                          leading: Text(_categories[i]["icon"]!, style: const TextStyle(fontSize: 24)),
+                          title: Text(_categories[i]["name"]!, style: const TextStyle(fontWeight: FontWeight.bold)),
+                          subtitle: Text(_categories[i]["trans"]!, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                          trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: Colors.amber),
+                          onTap: () {
+                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('🎉 تم إكمال وقراءة الأذكار بنجاح بنظام "تم"!')));
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                )
+              ],
+            ),
+            // واجهة المسبحة
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('أستغفر الله العظيم وأتوب إليه', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 30),
-                GestureDetector(
-                  onTap: () { setState(() => _counter++); HapticFeedback.vibrate(); },
-                  child: Container(
-                    width: 160, height: 160,
-                    decoration: const BoxDecoration(shape: BoxShape.circle, color: Color(0xFF5D48B7)),
-                    child: Center(child: Text('$_counter', style: const TextStyle(fontSize: 40, color: Colors.white, fontWeight: FontWeight.bold))),
-                  ),
-                ),
-                TextButton(onPressed: () => setState(() => _counter = 0), child: const Text('تصفير المسبحة', style: TextStyle(color: Colors.redAccent)))
-              ],
-            ),
-            ListView.builder(
-              itemCount: _azkar.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  color: Theme.of(context).cardColor,
-                  margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  child: Padding(
-                    padding: const EdgeInsets.all(14.0),
-                    child: Text(_azkar[index], textAlign: TextAlign.right, style: const TextStyle(fontSize: 16, height: 1.4)),
-                  ),
-                );
-              },
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class AlarmTab extends StatefulWidget {
-  final bool isSmartAlarmEnabled;
-  const AlarmTab({Key? key, required this.isSmartAlarmEnabled}) : super(key: key);
-  @override
-  State<AlarmTab> createState() => _AlarmTabState();
-}
-
-class _AlarmTabState extends State<AlarmTab> {
-  final TextEditingController _chatController = TextEditingController();
-  final List<Map<String, String>> _messages = [
-    {"role": "ai", "msg": "مرحباً بك في وحدة الذكاء الاصطناعي الأوفلاين. اسألني عن الصلاة، فضل الذكر، أو إذا كنت تشعر بالضيق الصدري."}
-  ];
-
-  void _sendMessage() {
-    String query = _chatController.text.trim().toLowerCase();
-    if (query.isEmpty) return;
-
-    setState(() {
-      _messages.add({"role": "user", "msg": _chatController.text});
-      String response = "تذكر دائماً أن بذكر الله تطمئن القلوب، جرب صياغة سؤالك بشكل آخر كالبحث عن (صلاة، ضيق، ذكر).";
-      
-      if (query.contains("صلاة") || query.contains("صلي")) {
-        response = "الصلاة هي عماد الدين، وأقرب ما يكون العبد من ربه وهو ساجد؛ فحافظ عليها في وقتها لتنعم بالراحة الكلية.";
-      } else if (query.contains("ضيق") || query.contains("حزين") || query.contains("تعبان")) {
-        response = "إذا ضاق صدرك عليك بالقرآن وكثرة السجود والاستغفار؛ قال تعالى: 'وَلَقَدْ نَعْلَمُ أَنَّكَ يَضِيقُ صَدْرُكَ بِمَا يَقُولُونَ * فَسَبِّحْ بِحَمْدِ رَبِّكَ وَكُن مِّنَ السَّاجِدِينَ'.";
-      } else if (query.contains("ذكر") || query.contains("أذكار") || query.contains("استغفار")) {
-        response = "أفضل الذكر هو 'لا إله إلا الله'، وكثرة الاستغفار تفتح المغاليق وتجلب الرزق والبركة في يومك.";
-      }
-      
-      _messages.add({"role": "ai", "msg": response});
-    });
-    _chatController.clear();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('مساعد أذكاري AI الشامل'), backgroundColor: const Color(0xFF161926), centerTitle: true),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(12),
-              itemCount: _messages.length,
-              itemBuilder: (context, i) {
-                bool isUser = _messages[i]["role"] == "user";
-                return Align(
-                  alignment: isUser ? Alignment.centerLeft : Alignment.centerRight,
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 4),
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: isUser ? const Color(0xFF5D48B7) : Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(_messages[i]["msg"]!, style: TextStyle(color: isUser ? Colors.white : null), textAlign: TextAlign.right),
-                  ),
-                );
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                IconButton(icon: const Icon(Icons.send, color: Color(0xFF9D8BFF)), onPressed: _sendMessage),
-                Expanded(
-                  child: TextField(
-                    controller: _chatController,
-                    textAlign: TextAlign.right,
-                    decoration: InputDecoration(
-                      hintText: 'اكتب سؤالك هنا (مثال: أشعر بضيق)...',
-                      filled: true,
-                      fillColor: Theme.of(context).cardColor,
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(20), borderSide: BorderSide.none),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class SettingsTab extends StatelessWidget {
-  final Function(bool) onThemeChanged;
-  final double fontSize;
-  final Function(double) onFontSizeChanged;
-  final bool isSmartAlarmEnabled;
-  final Function(bool) onAlarmSettingChanged;
-
-  const SettingsTab({
-    Key? key,
-    required this.onThemeChanged,
-    required this.fontSize,
-    required this.onFontSizeChanged,
-    required this.isSmartAlarmEnabled,
-    required this.onAlarmSettingChanged,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('لوحة الإعدادات الشاملة'), backgroundColor: const Color(0xFF161926), centerTitle: true),
-      body: ListView(
-        padding: const EdgeInsets.all(12),
-        children: [
-          SwitchListTile(
-            title: const Text('المظهر الداكن (Dark Mode)'),
-            value: Theme.of(context).brightness == Brightness.dark,
-            activeColor: const Color(0xFF9D8BFF),
-            onChanged: (v) => onThemeChanged(v),
-          ),
-          SwitchListTile(
-            title: const Text('تشغيل منبه الفجر الرياضي الذكي'),
-            subtitle: const Text('يجبرك على حل مسألة حسابية للاستيقاظ ونفي النوم'),
-            value: isSmartAlarmEnabled,
-            activeColor: const Color(0xFF9D8BFF),
-            onChanged: (v) => onAlarmSettingChanged(v),
-          ),
-          const Divider(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('${fontSize.toInt()} px', style: const TextStyle(fontWeight: FontWeight.bold)),
-                const Text('تغيير حجم خط القرآن وتكبير السطور'),
-              ],
-            ),
-          ),
-          Slider(
-            min: 16.0, max: 36.0,
-            value: fontSize,
-    
+                const Text('أستغفر الله العظيم وأتوب إليه', style: Te
